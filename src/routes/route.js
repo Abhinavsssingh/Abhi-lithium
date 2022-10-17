@@ -14,6 +14,94 @@ router.get('/students', function (req, res){
     res.send(students)
 })
 
+router.get('/movies', function (req,res){
+    
+    const mo=["Midnightmass","Friday 13","NArnia","Harry Potter"]
+    res.send(mo)
+})
+
+router.get('/movies/:index', function (req,res){
+     let inParams = req.params
+     console.log(inParams)
+     const mo=["Midnightmass","Friday 13","NArnia","Harry Potter"]
+     if(inParams.index>(mo.length-1)){
+        res.send("right valid")
+     }
+    
+    
+    res.send(mo[inParams.index])
+})
+
+router.get('/films', function (req,res){
+    
+    const fi=[ {
+        id: 1,
+        name: "The Shining"
+       },
+        {
+        id: 2,
+        name: "Incendies"
+       }, {
+        id: 3,
+        name: "Rang de Basanti"
+       }, {
+        id: 4,
+        name: "Finding Nemo"
+       }]
+       
+    res.send(fi)
+})
+
+router.get('/films/:id', function (req,res){
+
+    let idParam=req.params
+    
+    const fi=[ {
+        id: 1,
+        name: "The Shining"
+       },
+        {
+        id: 2,
+        name: "Incendies"
+       }, {
+        id: 3,
+        name: "Rang de Basanti"
+       }, {
+        id: 4,
+        name: "Finding Nemo"
+       }]
+
+       
+       if(idParam.id>(fi.length)||idParam.id==0){
+        res.send("not valid")
+        
+    }      
+       
+       
+       for(i of fi){
+
+       
+        
+        
+        if(i.id==idParam.id){
+            console.log(i)
+            res.send(i.name)
+        }
+       }
+        // res.send("enter valid")
+       
+
+
+    //    console.log(idParam)
+       
+    // res.send(idParam.name)
+})
+
+
+
+
+
+
 
 // Example 1 for path params
 router.get('/students/:studentName', function(req, res){
