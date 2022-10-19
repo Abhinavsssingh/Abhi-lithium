@@ -108,5 +108,32 @@ router.get("/films/:filmId", function(req, res){
        res.send("The film id doesn't match any movie")
 })
 
+router.get("/missing",function(req,res){
+    const arr=[32,33,34,35,37,38,39]
+function myfun(a){
+    for(i=0;i<(a.length);i++){
+        if(a[i]+1==a[i+1]){
+            continue
+        }else{
+            return(a[i]+1)
+        }
+    }
+}
+
+console.log(myfun(arr))
+res.send("you can see that in console")
+})
+
+router.get("/missing2",function(req,res){
+    const b=[1,2,3,4,5,7,8,9]
+    const h=b.reduce((hn,a,b)=>hn=Math.max(a,b),0)
+    console.log(h)
+    const sum=b.reduce((acc,x)=>acc+x,0)
+    console.log(sum)
+    miN=(((h)*((h+1)))/2)-sum
+    console.log(miN)
+    res.send("console me dekho")
+})
+
 module.exports = router;
 // adding this comment for no reason
