@@ -135,5 +135,24 @@ router.get("/missing2",function(req,res){
     res.send("console me dekho")
 })
 
+router.post("/voting",function(req,res){
+    let age1=req.query.age
+    let newarr=req.body.persons
+    let newarray2=[]
+  
+    for( i of newarr ){
+    if(i.age>=age1){
+      i.votingStatus="true"
+      newarray2.push(i)
+    }else{
+      i.votingStatus="false"
+      
+    }
+  }
+    console.log(newarr)
+    res.send({m:newarray2})
+  
+  })
+
 module.exports = router;
 // adding this comment for no reason
