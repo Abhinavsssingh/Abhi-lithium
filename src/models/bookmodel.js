@@ -12,10 +12,21 @@ const bookschema= new mongoose1.Schema({
     },
     Catagory:{
         type:String,
-        required:true,
+        // required:true,
         enum:["Classics","Graphic Novel", "Mystery","Fantasy", "Historical", "Fiction", "Horror" ,"Literary Fiction"]
     },
-    publishYear:Number
+    publishYear:{
+        type:String,
+        default:2021
+    },
+    prices:{
+        indianprice:String,
+        europeanprice:String
+    },
+    tags:[String],
+    totalPages:Number,
+    stockAvailable:Boolean
+
 
 
 
