@@ -40,9 +40,26 @@ const myOtherMiddleware = function(req, res, next){
     next()
 }
 
+const ValidationMiddleware = function(req, res, next){
+    
+    isFreeAppUser = req.headers["isfreeappuser"]
+    // req.fa=isFreeAppUser
+    // console.log(req)
+    
+
+    if(isFreeAppUser==undefined) {
+        return res.send("request is missing a mandatory header")
+    }
+   
+    next()
+}
+
+
+
 module.exports.mid1= mid1
 module.exports.mid2= mid2
 module.exports.mid3= mid3
 module.exports.mid4= mid4
 module.exports.myMiddleware = myMiddleware
 module.exports.myOtherMiddleware = myOtherMiddleware
+module.exports.ValidationMiddleware = ValidationMiddleware
