@@ -4,15 +4,89 @@ const userModel = require("../models/userModel");
 /*
   Read all the comments multiple times to understand why we are doing what we are doing in login api and getUserData api
 */
-const createUser = async function (abcd, xyz) {
-  //You can name the req, res objects anything.
-  //but the first parameter is always the request 
-  //the second parameter is always the response
-  let data = abcd.body;
+const createUser = async function (req,res) {
+  
+  let data = req.body;
   let savedData = await userModel.create(data);
-  console.log(abcd.newAtribute);
-  xyz.send({ msg: savedData });
+  res.send({ msg: savedData });
 };
+
+const UsserLogin = async function (req,res) {
+  
+  let data = req.body
+  let em= data.emailId
+  let paa=data.password
+  let ucheck= await userModel.findOne({emailId:em},{password:paa})
+  if(!ucheck){
+    return res.send("Invalid email or password")
+  }
+
+  let token = jwt.sign(
+    {
+      userId: ucheck._id.toString(),
+      batch: "Lithium",
+      organisation: "FunctionUp",
+    },
+    "functionup-Lithium-very-very-secret-key"
+  )
+  res.setHeader("x-auth-token", token);
+  res.send({ status: true, token: token })
+
+};
+
+const getdetaIl = async function (req,res) {
+  // let x=req.headers['x-auth-token']
+  // // console.log(x)
+  // if(!x){
+  //   return res.send("header missing")
+  // }
+  
+  // let decodedToken = jwt.verify(x, "functionup-Lithium-very-very-secret-key")
+  // if (!decodedToken)
+  //   return res.send({ status: false, msg: "token is invalid" })
+  let idd= req.params.userId
+  // console.log(idd)
+  let usersee= await userModel.findById(idd)
+  // console.log(usersee)
+  res.send({data:usersee})
+}
+
+const updatedata = async function (req,res) {
+  let x=req.headers['x-auth-token']
+  // console.log(x)
+  if(!x){
+    return res.send("header missing")
+  }
+  
+  let decodedToken = jwt.verify(x, "functionup-Lithium-very-very-secret-key")
+  if (!decodedToken)
+    return res.send({ status: false, msg: "token is invalid" })
+  
+  let idd= req.params.userId
+  // let onb=await userModel.findById(idd)
+  let userData=req.body
+  let updatedUser = await userModel.findOneAndUpdate({ _id: idd }, {$set:userData},{new:true})
+  res.send({ status: true, data: updatedUser })
+}
+
+const deleted =async function (req,res) {
+  let x=req.headers['x-auth-token']
+  // console.log(x)
+  if(!x){
+    return res.send("header missing")
+  }
+  let decodedToken = jwt.verify(x, "functionup-Lithium-very-very-secret-key")
+  if (!decodedToken)
+    return res.send({ status: false, msg: "token is invalid" })
+
+    let idd= req.params.userId
+    // let onb=await userModel.findById(idd)
+    // let userData=req.body
+    let updatedUser = await userModel.findOneAndUpdate({ _id: idd }, {$set:{isDeleated:true}},{new:true})
+    res.send({ status: true, data: updatedUser })
+}
+
+
 
 const loginUser = async function (req, res) {
   let userName = req.body.emailId;
@@ -96,3 +170,7 @@ module.exports.createUser = createUser;
 module.exports.getUserData = getUserData;
 module.exports.updateUser = updateUser;
 module.exports.loginUser = loginUser;
+module.exports.UsserLogin = UsserLogin;
+module.exports.getdetaIl = getdetaIl;
+module.exports.updatedata = updatedata;
+module.exports.deleted = deleted;
