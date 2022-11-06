@@ -52,15 +52,15 @@ const getdetaIl = async function (req,res) {
 }
 
 const updatedata = async function (req,res) {
-  let x=req.headers['x-auth-token']
-  // console.log(x)
-  if(!x){
-    return res.send("header missing")
-  }
+  // let x=req.headers['x-auth-token']
+  // // console.log(x)
+  // if(!x){
+  //   return res.send("header missing")
+  // }
   
-  let decodedToken = jwt.verify(x, "functionup-Lithium-very-very-secret-key")
-  if (!decodedToken)
-    return res.send({ status: false, msg: "token is invalid" })
+  // let decodedToken = jwt.verify(x, "functionup-Lithium-very-very-secret-key")
+  // if (!decodedToken)
+  //   return res.send({ status: false, msg: "token is invalid" })
   
   let idd= req.params.userId
   // let onb=await userModel.findById(idd)
@@ -70,14 +70,14 @@ const updatedata = async function (req,res) {
 }
 
 const deleted =async function (req,res) {
-  let x=req.headers['x-auth-token']
-  // console.log(x)
-  if(!x){
-    return res.send("header missing")
-  }
-  let decodedToken = jwt.verify(x, "functionup-Lithium-very-very-secret-key")
-  if (!decodedToken)
-    return res.send({ status: false, msg: "token is invalid" })
+  // let x=req.headers['x-auth-token']
+  // // console.log(x)
+  // if(!x){
+  //   return res.send("header missing")
+  // }
+  // let decodedToken = jwt.verify(x, "functionup-Lithium-very-very-secret-key")
+  // if (!decodedToken)
+  //   return res.send({ status: false, msg: "token is invalid" })
 
     let idd= req.params.userId
     // let onb=await userModel.findById(idd)
@@ -140,6 +140,12 @@ const getUserData = async function (req, res) {
     return res.send({ status: false, msg: "token is invalid" });
 
   let userId = req.params.userId;
+  
+  if(userId!=decodedToken.userId){
+    return res.send({status:false, msg:"unauthorized"})
+  }
+
+  
   let userDetails = await userModel.findById(userId);
   if (!userDetails)
     return res.send({ status: false, msg: "No such user exists" });

@@ -10,8 +10,15 @@ const auth =async function (req,res,next){
     return res.send("header missing")
   }
   let decodedToken = jwt.verify(x, "functionup-Lithium-very-very-secret-key")
-  if (!decodedToken)
+  if (!decodedToken){
     return res.send({ status: false, msg: "token is invalid" })
+  }
+
+  let idd = req.params.userId
+
+  if(idd!=decodedToken.userId){
+      return res.send({status:false, msg:"unauthorized"})
+    }
   next()
 }
 
@@ -32,8 +39,8 @@ router.get("/users/:userId", userController.getUserData)
 
 router.put("/users/:userId", userController.updateUser)
 
-router.put("/updatedata/:userId", userController.updatedata)
+router.put("/updatedata/:userId",auth,userController.updatedata)
 
-router.put("/deleted/:userId", userController.deleted)
+router.put("/deleted/:userId",auth,userController.deleted)
 
 module.exports = router;
