@@ -5,21 +5,25 @@ const userModel = require("../models/userModel");
   Read all the comments multiple times to understand why we are doing what we are doing in login api and getUserData api
 */
 const createUser = async function (req,res) {
-  
+  try{
   let data = req.body;
   let savedData = await userModel.create(data);
-  res.send({ msg: savedData });
+  res.status(201).send({ msg: savedData });
+  }catch(error){
+      res.status(500).send({msg:error.message})
+  }
 };
 
 const UsserLogin = async function (req,res) {
-  
+  try{
   let data = req.body
   let em= data.emailId
   let paa=data.password
-  let ucheck= await userModel.findOne({emailId:em},{password:paa})
-  if(!ucheck){
-    return res.send("Invalid email or password")
-  }
+  let ucheck= await userModel.findOne({emailId:em,password:paa})
+  console.log(ucheck)
+  // if(!ucheck){
+  //   return res.send("Invalid email or password")
+  // }
 
   let token = jwt.sign(
     {
@@ -30,11 +34,15 @@ const UsserLogin = async function (req,res) {
     "functionup-Lithium-very-very-secret-key"
   )
   res.setHeader("x-auth-token", token);
-  res.send({ status: true, token: token })
+  res.status(200).send({ status: true, token: token })
 
+}catch(error){
+  return res.status(400).send({msg:error.message})
+}
 };
 
 const getdetaIl = async function (req,res) {
+  try{
   // let x=req.headers['x-auth-token']
   // // console.log(x)
   // if(!x){
@@ -44,14 +52,24 @@ const getdetaIl = async function (req,res) {
   // let decodedToken = jwt.verify(x, "functionup-Lithium-very-very-secret-key")
   // if (!decodedToken)
   //   return res.send({ status: false, msg: "token is invalid" })
+  
   let idd= req.params.userId
+  
   // console.log(idd)
   let usersee= await userModel.findById(idd)
+  // if(!usersee){
+  //   return res.send("Invalid user id")
+  // }
+
   // console.log(usersee)
-  res.send({data:usersee})
+  res.status(200).send({data:usersee})
+}catch(error){
+  return res.status(500).send({msg:error.message})
+}
 }
 
 const updatedata = async function (req,res) {
+  try{
   // let x=req.headers['x-auth-token']
   // // console.log(x)
   // if(!x){
@@ -66,10 +84,11 @@ const updatedata = async function (req,res) {
   // let onb=await userModel.findById(idd)
   let userData=req.body
   let updatedUser = await userModel.findOneAndUpdate({ _id: idd }, {$set:userData},{new:true})
-  res.send({ status: true, data: updatedUser })
-}
+  res.status(200).send({ status: true, data: updatedUser })
+  }catch(error){res.status(500).send({msg:error.message})}}
 
 const deleted =async function (req,res) {
+  try{
   // let x=req.headers['x-auth-token']
   // // console.log(x)
   // if(!x){
@@ -83,7 +102,8 @@ const deleted =async function (req,res) {
     // let onb=await userModel.findById(idd)
     // let userData=req.body
     let updatedUser = await userModel.findOneAndUpdate({ _id: idd }, {$set:{isDeleated:true}},{new:true})
-    res.send({ status: true, data: updatedUser })
+    res.status(200).send({ status: true, data: updatedUser })
+  }catch(error){res.status(500).send({msg:error.message})}
 }
 
 
